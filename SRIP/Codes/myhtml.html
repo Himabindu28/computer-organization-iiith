@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MIPS SIMULATOR</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../Libraries/bootstrap.min.css">
+  <link rel="stylesheet" href="mycss.css">
+  <script src= "../Libraries/jquery.js"></script>
+  <script src="../Libraries/bootstrap.min.js"></script>
+  <script src="programs.js"></script>
+  <script src="myjs.js"></script>
+  
+  
+
+
+</head>
+
+<body>
+<div style="padding: 10px 10px 10px 10px">
+<h4> MIPS Simulator</h4>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">File </button>
+    <ul class="dropdown-menu" role="menu">
+    <li> <a class="dropdown-item" href="#">New</a></li>
+    <li> <a class="dropdown-item" href="#">Open</a></li>
+    <li> <a class="dropdown-item" href="#">Close</a></li>
+    <li> <a class="dropdown-item" href="#">Close All</a></li>
+    <li> <a class="dropdown-item" href="#">Save</a></li>
+    <li> <a class="dropdown-item" href="#">Save As</a></li>
+    <li> <a class="dropdown-item" href="#">Exit</a></li>
+      </ul>
+      </div>
+
+
+      <div class="btn-group">
+    <button type="button" class="btn btn-primary  dropdown-toggle" data-toggle="dropdown">Edit </button>
+    <ul class="dropdown-menu" role="menu">
+    <li><a class="dropdown-item" href="#">Undo</a></li>
+    <li><a class="dropdown-item" href="#">Redo</a></li>
+    <li><a class="dropdown-item" href="#">Cut</a></li>
+    <li><a class="dropdown-item" href="#">Copy</a></li>
+    <li><a class="dropdown-item" href="#">Paste</a></li>
+    <li><a class="dropdown-item" href="#">Select all</a></li>
+      </ul>
+      </div>
+      
+      
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      Run </button>
+      <ul class="dropdown-menu" role="menu">
+
+    <li> <a onclick="loadProgram()">Assemble</a></li>
+    <li> <a href="#">Run</a></li>
+    <li> <a href="#">Step</a></li>
+    <li> <a href="#">Reset</a></li>
+    <li> <a href="#">Clear Breakpoints</a></li>
+    <li> <a href="#">Toggle Breakpoints</a></li>
+      </ul>
+    </div>
+
+    <div class="btn-group" >
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Help </button>
+    <ul class="dropdown-menu" role="menu">
+        <li><a  id="Helpid" >Help</a></li>
+        <li><a href="#" onclick="myabout()">About</a></li>
+      </ul>
+    </div>
+
+
+<hr>
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#Editor" style="border-left: 1px solid black;">Editor</a></li>
+    <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Execute">Execute</a></li>
+    <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Codes">Codes</a></li>
+    <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Helpin" id="lol">Help</a></li>
+  </ul>
+  
+  <div class="tab-content" >
+    <div id="Editor" class="tab-pane fade in active" style="height: 450px; overflow: auto; border: 1px solid black; padding: 15px 15px 15px 15px;">
+      <textarea id="mips-program" placeholder="# Enter your code here and click on 'Load Program'" style="width:100%;height:400px;resize:none;border:1px solid #00ccff" spellcheck="false"># Enter your code here and click on 'Load Program'
+
+</textarea>
+      
+    </div>
+    <div id="Execute" class="tab-pane fade" style="height: 450px; overflow: auto;border: 1px solid black; padding: 15px 15px 15px 15px;">
+      <h5 align="right" style="margin-right: 12em">Registers</h5>
+
+      <table >
+          <tbody >
+            <tr >
+              <td rowspan="19" >
+                text section
+                <!-- <div style="width: 1000px;border: 1px solid black; "> -->
+                <div id="statustext" style="overflow: auto;"></div>
+                 <!-- </div > -->
+
+              <button id="btn1" style="float:right" onclick="nextStep()" disabled="">Step</button>
+              <br>
+              <br>
+
+              <button id="btn2" style="float:right" onclick="runProgram()" disabled="">Run</button>
+
+                
+                </td>
+                </tr>
+                
+    <tr>
+      <td>Name</td>
+      <td>Number</td>
+      <td >Value</td>
+    </tr>
+
+    <tr>
+      <td>$r0</td>
+      <td>    0   </td>
+      <td id="r0">0</td>
+      <td id="dataSection" rowspan="38" style="background-color:#fff !important;text-align:left;overflow-y:auto"></td>
+    </tr>
+
+    <tr>
+      <td>$at</td>
+      <td>    1   </td>
+      <td id="at">0</td>
+    </tr>
+
+    <tr>
+      <td>$v0</td>
+      <td>    2  </td>
+      <td id="v0">0</td>
+    </tr>
+
+    <tr>
+      <td>$v1</td>
+      <td>    3   </td>
+      <td id="v1">0</td>
+    </tr>
+
+    <tr>
+      <td>$a0</td>
+      <td>    4   </td>
+      <td id="a0">0</td>
+    </tr>
+
+    <tr>
+      <td>$a1</td>
+      <td>    5   </td>
+      <td id="a1">0</td>
+    </tr>
+
+    <tr>
+      <td>$a2</td>
+      <td>    6   </td>
+      <td id="a2">0</td>
+    </tr>
+
+    <tr>
+      <td>$a3</td>
+      <td>    7   </td>
+      <td id="a3">0</td>
+    </tr>
+
+    <tr>
+      <td>$t0</td>
+      <td>    8   </td>
+      <td id="t0">0</td>
+    </tr>
+
+    <tr>
+      <td>$t1</td>
+      <td>    9   </td>
+      <td id="t1">0</td>
+    </tr>
+
+    <tr>
+      <td>$t2</td>
+      <td>    10   </td>
+      <td id="t2">0</td>
+    </tr>
+
+    <tr>
+      <td>$t3</td>
+      <td>    11   </td>
+      <td id="t3">0</td>
+    </tr>
+
+    <tr>
+      <td>$t4</td>
+      <td>    12   </td>
+      <td id="t4">0</td>
+    </tr>
+
+    <tr>
+      <td>$t5</td>
+      <td>    13   </td>
+      <td id="t5">0</td>
+    </tr>
+
+    <tr>
+      <td>$t6</td>
+      <td>    14   </td>
+      <td id="t6">0</td>
+    </tr>
+
+    <tr>
+      <td>$t7</td>
+      <td>    15   </td>
+      <td id="t7">0</td>
+    </tr>
+
+    <tr>
+      <td>$s0</td>
+      <td>    16   </td>
+      <td id="s0">0</td>
+    </tr>
+
+    <tr>
+      <td  rowspan="19"  style="background-color:#fff !important;padding:1em;overflow-y:auto">
+        <div  style="width: 1200px; ">
+        data segment
+        </div>
+      </td>
+
+    </tr>
+
+    <tr>
+      <td>$s1</td>
+      <td>    17   </td>
+      <td id="s1">0</td>
+    </tr>
+
+    <tr>
+      <td>$s2</td>
+      <td>    18   </td>
+      <td id="s2">0</td>
+    </tr>
+
+    <tr>
+      <td>$s3</td>
+      <td>    19   </td>
+      <td id="s3">0</td>
+    </tr>
+
+    <tr>
+      <td>$s4</td>
+      <td>    20   </td>
+      <td id="s4">0</td>
+    </tr>
+
+    <tr>
+      <td>$s5</td>
+      <td>    21   </td>
+      <td id="s5">0</td>
+    </tr>
+
+    <tr>
+      <td>$s6</td>
+      <td>    22   </td>
+      <td id="s6">0</td>
+    </tr>
+
+    <tr>
+      <td>$s7</td>
+      <td>    23   </td>
+      <td id="s7">0</td>
+    </tr>
+
+    <tr>
+      <td>$t8</td>
+      <td>    24   </td>
+      <td id="t8">0</td>
+    </tr>
+
+    <tr>
+      <td>$t9</td>
+      <td>    25   </td>
+      <td id="t9">0</td>
+    </tr>
+
+    <tr>
+      <td>$k0</td>
+      <td>    26   </td>
+      <td id="k0">0</td>
+    </tr>
+
+    <tr>
+      <td>$k1</td>
+      <td>    27   </td>
+      <td id="k1">0</td>
+    </tr>
+      <!-- <tr>
+      <td>$gt</td>
+      <td>    28   </td>
+      <td id="gt">0</td>
+    </tr>
+
+    <tr>
+      <td>$st</td>
+      <td>    29   </td>
+      <td id="st">0</td>
+    </tr>
+
+    <tr>
+      <td>$zt</td>
+      <td>    30   </td>
+      <td id="zt">0</td>
+    </tr>
+ -->
+    <tr>
+      <td>$gp</td>
+      <td>    28   </td>
+      <td id="gp">0</td>
+    </tr>
+
+    <tr>
+      <td>$sp</td>
+      <td>    29   </td>
+      <td id="sp">0</td>
+    </tr>
+
+    <tr>
+      <td>$s8</td>
+      <td>    30   </td>
+      <td id="s8">0</td>
+    </tr>
+
+    <tr>
+      <td>$ra</td>
+      <td>    31  </td>
+      <td id="ra">0</td>
+    </tr>
+
+
+
+  </tbody>
+      </table>
+      
+    </div>
+    <div id="Codes" class="tab-pane fade" style="height: 440px; border: 1px solid black">
+
+      <ul class="nav nav-pills">
+        <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program1">Program 1</a></li>
+    <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program2">Program 2</a></li>
+    <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program3">Program 3</a></li>
+    
+    
+    </ul>
+
+      <div class="tab-content" style=" width: 100%" >
+         <div id="Program1" class="tab-pane fade" style=" overflow: auto;  height: 400px;">
+          <div style=" overflow: auto;border: 1px solid black; padding-left: 15px;height: 330px; ">
+      # Sample Program 1<br>
+<br>
+### Airthmetic and Logical operations ###<br>
+<br>
+.text<br>
+<br>
+## Arithmetic ##<br>
+<br>
+  addi $t0 , $zero , 30<br>
+  addi $t1 , $zero , 10<br>
+<br>
+  add $t2 , $t0 , $t1<br>
+<br>
+  sub $t3 , $t1 , $t0<br>
+<br>
+  mul $t4 , $t0 , $t1<br>
+<br>
+## Logical ##<br>
+<br>
+  addi $t0 , $zero , 13 #...0001101<br>
+  addi $t1 , $zero , 11 #...0001011<br>
+<br>
+  and $t2 , $t0 , $t1 #...0001001<br>
+  andi $t3 , $t2 , 12 #...0001001 & ...0001100 = ...0001000<br>
+<br>
+  or $t4 , $t0 , $t1 #...0001111<br>
+  ori $t5 , $t0 , 2 #...0001111<br>
+<br>
+  nor $t6 , $t0 , $t1 # ...1110000<br>
+<br>
+  halt<br>
+<br>
+# Expected register values after halt:<br>
+# $t0 = 13 <br>
+# $t1 = 11
+# $t2 = 9<br>
+# $t3 = 8<br>
+# $t4 = 15<br>
+# $t5 = 15<br>
+# $t6 = -16<br>
+</div>
+<div style="height: 30px; ">
+  <br><b>
+  Click here to copy and paste on editor</b>
+
+<button onclick="loadSampleProgram('sampleProgram1')"> Copy</button>
+
+
+    </div>
+      
+    </div>
+
+     <div id="Program2" class="tab-pane fade" style="overflow: auto;height: 400px; ">
+      
+      <div style=" overflow: auto;border: 1px solid black; padding-left: 15px; height: 310px;">
+
+# Sample Program 2<br>
+<br>
+### Load Word and Store Word ###<br>
+<br>
+.data<br>
+<br>
+  arr1: .word 1 , 2 , 3 , 4<br>
+  arr2: .space 8 # array of 2 words<br>
+  val1: .word 99<br>
+  val2: .space 4  # 1 word<br>
+<br>
+.text<br>
+<br>
+  la $s0 , arr1<br>
+  la $s1 , arr2<br>
+<br>
+  # loading arr1<br>
+  lw $t0 , 0($s0)<br>
+  lw $t1 , 4($s0)<br>
+  lw $t2 , 8($s0)<br>
+  lw $t3 , 12($s0)<br>
+<br>
+  # storing into arr2<br>
+  sw $t0 , 0($s1)<br>
+  sw $t1 , 4($s1)<br>
+<br>
+  addi $sp , $sp , -8<br>
+<br>
+  sw $t2 , 0($sp)<br>
+  sw $t3 , 4($sp)<br>
+<br>
+  # loading arr2 and stack<br>
+  lw $t4 , 0($s1)<br>
+  lw $t5 , 4($s1)<br>
+  lw $t6 , 0($sp)<br>
+  lw $t7 , 4($sp)<br>
+<br>
+  addi $sp , $sp , 8<br>
+  <br>
+  # copying val1 to val2<br>
+  lw $s2 , val1<br>
+  sw $s2 , val2<br>
+  lw $s3 , val2<br>
+<br>
+  halt<br>
+<br>
+# Expected register values after halt:<br>
+# $t0 = 1 <br>
+# $t1 = 2<br>
+# $t2 = 3<br>
+# $t3 = 4<br>
+# $t4 = 1<br>
+# $t5 = 2<br>
+# $t6 = 3<br>
+# $t7 = 4<br>
+# $s2 = 99<br>
+# $s3 = 99<br>
+# $sp = [4,3,,,....] (array value)<br>
+# arr1 = [1,2,3,4]<br>
+# arr2 = [1,2]<br>
+# val1 = 99<br>
+# val2 = 99<br>
+
+      </div>
+<div style="height: 30px; ">
+  <br>
+  <b>Click here to copy and paste on editor</b>
+    
+<button onclick="loadSampleProgram('sampleProgram2')"> Copy</button>
+<br>
+    </div>
+      
+    </div>
+     <div id="Program3" class="tab-pane fade" style="overflow: auto; height: 400px;">
+      
+      <div style=" overflow: auto;border: 1px solid black; padding-left: 15px; height: 310px;">
+
+# Sample Program 3<br>
+<br>
+### Jump Statements ###<br>
+<br>
+.data<br>
+  N: .word 100<br>
+<br>
+.text<br>
+  <br>
+  lw $s0 , N<br>
+<br>
+  slti $t0 , $s0 , 0<br>
+  bne $t0 , $zero , end<br>
+<br>
+  sumN:<br>
+    addi $t1 , $t1 , 0 #$t1 = i<br>
+    add $s1 , $s1 , $s0 #$s1 = sum<br>
+    loop:<br>
+      slt $t2 , $t1 , $s0 #i<br>
+      beq $t2 , $zero , end<br>
+      add $s1 , $s1 , $t1 #sum = sum + i<br>
+      addi $t1 , $t1 , 1 #i = i + 1<br>
+      j loop<br>
+<br>
+  end:<br>
+    halt<br>
+<br>
+<br>
+# Expected register values after halt:<br>
+# $t1 = 100<br>
+# $s0 = 100<br>
+# $s1 = 5050<br>
+
+      </div>
+<div style="height: 30px; ">
+  <br>
+  <b>Click here to copy and paste on editor</b>
+ 
+<button onclick="loadSampleProgram('sampleProgram3')"> Copy</button>
+    </div>
+      
+    </div>
+  </div>
+  <br>
+
+  </div>
+    <div id="Helpin" class="tab-pane fade" style="height: 450px; overflow: auto;border: 1px solid black; padding: 15px 15px 15px 15px;">
+      <div class="scroll" >
+    <p>
+      <b><u>User's Guide</u></b><br><br>
+      <b>1.Introduction</b><br>
+      This simulator is designed to run MIPS codes, programed in MIPS assmebly language.<br><br>
+      <b>2.Layout</b><br>
+      At the top of the simulator there is a <b>MenuBar</b>. The Menubar provides following functionalities ..
+      </p><ul style="list-style-type:square;">
+        <li>
+          File
+          <br>
+          <ul style="list-style-type:square;">
+            <li>
+              Options for writing a new code; opening a file; closing or saving the current code etc
+            </li>
+            <li>
+              Exiting the Simulators
+              <br>
+            </li>
+          </ul>
+        </li>
+        <li>
+          Edit
+          <br>
+          <ul style="list-style-type:square;">
+            <li>
+              Editor options like undo, redo, select all etc.
+              <br>
+            </li>
+          </ul>
+        </li>
+        <li>
+          Run
+          <br>
+          <ul style="list-style-type:square;">
+            <li>
+              Assemble the code
+            </li>
+            <li>
+              Run the whole program
+            </li>
+            <li>
+              Run the current instruction of the program
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <br>
+      The main panel consistes of 4 tabs.
+      <br>
+      <ul style="list-style-type:square;">
+        <li>
+          <b>Editor</b> : Here the user will write their programs. The editor can have multiple tabs of code section. In
+          each tab user can write their programs.
+          <br>
+        </li>
+        <li>
+          <b>Execute</b> : Assembling and running of the user code will be done here. It consists of various sections
+          like the register table, text section, memory table etc.
+          <br>
+
+        </li>
+        <li>
+          <b>Sample Codes</b> : Various sample Mips Programs are provided here for the user help.
+          <br>
+        </li>
+        <li>
+          <b>Help</b> : User guide to understand the simulator.
+          <br>
+        </li>
+      </ul>
+      <br>
+      The bottom I/O panel is to generate the assembler messages. Assembly errors, runtime errors, input/output messages
+      etc will be generated here.<br><br>
+      <b>3.Writing and Running a sample program</b><br>
+      <ul style="list-style-type:square;">
+        <li>
+          To write a program, the first thing we have to do, is to open a new editor where we can write our program. To
+          do that ..<br><br>
+          <ol>
+            <li>
+              Click on the <b>File</b> button from the menu. A list will appear.
+            </li>
+            <li>
+              Click on the <b>New</b> button from the list. A new editor will appear in the editor tab. Here we will
+              write our program
+            </li>
+          </ol><br>
+        </li>
+        <li>
+          Next, we will write our code in the editor. We can either start from scratch and write the program or we can
+          copy the sample code, present in the sample codes tab, and modify it to our needs.
+        </li>
+        <li>
+          After writing our program, we will assemble it. To do that ..<br><br>
+          <ol>
+            <li>
+              Click on the <b>Run</b> buttion from the menu. A list will appear.
+            </li>
+            <li>
+              Click on the <b>Assemble</b> button from the list.
+            </li>
+          </ol><br>
+
+          This will assemble our arm program and the control will be transfered from the editor window to the execute
+          window. If there are error(s) in our program, the subsequent messages will be displayed in the bottom I/O
+          panel.
+        </li>
+        <li>
+          After the program has been successfuly assebled, we can run it. We can either choose to run the whole program
+          in one shot, or we can run one instruction at a time. To do the, the execute panel has two buttons, <b>Run</b>
+          and <b>Step</b>
+        </li>
+      </ul>
+      <b>4.Supported Directives/Instructions</b><br>
+      The registers names are the same as defined in MIPS.<br>
+      <ol>
+        <li>
+          In this version following directives are supported :
+          <ul style="list-style-type:square;">
+            <li>
+              <b>.word</b> : To define a single variable or an array. If inital value(s) is not provided, no memory
+              space will be reserved and the variable name will be an alias to the previously defined variable.
+            </li>
+            <li>
+              <b>.space</b> :To allocate a memory chunk of given size to a variable. A memory chunk might be composed of
+              several words.
+            </li>
+            <li>
+              <b>.asciiz</b> :To define a null terminated String
+            </li>
+            <li>
+              <b>.ascii</b> :To define a String that is not null-terminated
+            </li>
+            <li>
+              <b>.text</b> :To specify the begining of the text section.
+            </li>
+            <li>
+              <b>.data</b> :To specify the beginning of the data section.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Since this is a simulator form MIPS, All the instructions and their format is same as defined by MIPS assembly
+          language. The functionality of every instruction is in accordance with the MIPS architecture. In this version,
+          following instructions are supported :
+
+          <table>
+            <tbody><tr>
+              <td>add</td>
+              <td>addi</td>
+              <td>addiu</td>
+              <td>addu</td>
+              <td>and</td>
+            </tr>
+            <tr>
+              <td>andi</td>
+              <td>b</td>
+              <td>beq</td>
+              <td>beqz</td>
+              <td>bge</td>
+            </tr>
+            <tr>
+              <td>bgez</td>
+              <td>bgezal</td>
+              <td>bgt</td>
+              <td>bgtz</td>
+              <td>ble</td>
+            </tr>
+            <tr>
+              <td>blez</td>
+              <td>blt</td>
+              <td>bltz</td>
+              <td>bltzal</td>
+              <td>bne</td>
+            </tr>
+            <tr>
+              <td>bnez</td>
+              <td>clo</td>
+              <td>clz</td>
+              <td>div</td>
+              <td>divu</td>
+            </tr>
+            <tr>
+              <td>j</td>
+              <td>jal</td>
+              <td>jalr</td>
+              <td>jr</td>
+              <td>la</td>
+            </tr>
+            <tr>
+              <td>lb</td>
+              <td>lh</td>
+              <td>li</td>
+              <td>lw</td>
+              <td>mfhi</td>
+            </tr>
+            <tr>
+              <td>mflo</td>
+              <td>mthi</td>
+              <td>mtlo</td>
+              <td>move</td>
+              <td>movn</td>
+            </tr>
+            <tr>
+              <td>movz</td>
+              <td>mul</td>
+              <td>mulo</td>
+              <td>mult</td>
+              <td>neg</td>
+            </tr>
+            <tr>
+              <td>nor</td>
+              <td>not</td>
+              <td>or</td>
+              <td>ori</td>
+              <td>sll</td>
+            </tr>
+            <tr>
+              <td>sllv</td>
+              <td>slt</td>
+              <td>slti</td>
+              <td>sltiu</td>
+              <td>sltu</td>
+            </tr>
+            <tr>
+              <td>srl</td>
+              <td>srlv</td>
+              <td>sb</td>
+              <td>seb</td>
+              <td>seh</td>
+            </tr>
+            <tr>
+              <td>sh</td>
+              <td>sub</td>
+              <td>sw</td>
+              <td>xor</td>
+              <td>xori</td>
+            </tr>
+          </tbody></table><br>
+          To add comments use "#" or "//"
+        </li>
+      </ol>
+
+    <p></p>
+  </div>
+
+
+      
+    </div>
+
+      <div class="bottom_menu">
+    
+
+<div class="tab-content" >
+    <div id="bottom_Run" class="tab-pane fade in active" >
+      <h3> Run Input/Output </h3>
+      
+    </div>
+    <div id="bottom_parser" class="tab-pane fade">
+      <h3>Parser Message</h3>
+      
+    </div>
+
+    <div class="wrapper">
+      <div style="background-color: grey;width: 10px">
+        
+      
+     
+        <div id="status" style="float:left;background-color:#fff ;width:100%"></div>
+        <!-- <textarea id="parsertext" style="width: 100%;height:95%;">
+
+      </textarea> -->
+      <!-- <button  id="bottom_clear">Clear</button> -->
+      </div>
+    </div>
+    <br>
+  </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+
+    textarea {
+  
+  }
+
+
+  td {
+    text-align: center;
+  }
+
+  thead tr {
+    background-color: #00aaff;  
+  }
+
+  tbody tr:hover {
+    background-color: inherit !important; 
+  }
+
+  button , select {
+    background-color: #fff;
+    padding: 3px;
+    border-radius: 5px;
+  }
+
+  #instructions {
+    padding: 3px 3px;
+    margin: 0 10px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+
+  table {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+
+}
+table, th, td {
+    border: 1px solid black;
+    width: 200px;
+}
+li {
+
+    text-align: -webkit-match-parent;
+}
+ol {
+    list-style-type: decimal;
+}

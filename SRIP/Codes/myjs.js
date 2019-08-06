@@ -42,11 +42,19 @@ function myabout() {
   confirm("MipsParser version 1.0  Designed by-  Thogaru Himabindu . MipsParser is a MIPS assembler and runtime simulator");
 }
 $(document).ready(function(){
+ $("#assem").click(function(){
+      $("#execc").click();
+
+  });
+
  $("#Helpid").click(function(){
       $("#lol").click();
 
   });
+
 });
+
+
 
 var textareas = document.getElementsByTagName('textarea');
   var count = textareas.length;
@@ -89,12 +97,7 @@ function updateData(start,end) {
 			type = d[2]; // 'word' or 'space'
 			arr = d[3]; // content followed by .word or .space
 
-			if(!validLabel(label + ':')){
-    			alert('Invalid label: "'+removeBlankSpaces(instructions[i])+'"');
-				document.getElementById('status').innerHTML = ' ERROR:'+instructions[i];
-	    		currentInstruction = instructions.length;
-	    		return;
-    		}
+		
 
 			if(data[label]){ // checking for repetition of label
 				alert('"' +label + '" repeated');
@@ -176,7 +179,7 @@ function loadProgram() {
 	};
 
 
-	instructions = document.getElementById('mips-program').value.split('\n'); // fetching the program
+	instructions = document.getElementById('code').value.split('\n'); // fetching the program
 
 	var pos;
 	for(var i=0 ; i<instructions.length ; i++) { // scraping the comments from the instructions
@@ -250,7 +253,7 @@ function loadProgram() {
 }
 
 function loadSampleProgram(id){
-	document.getElementById('mips-program').value = sampleProgram[id];
+	document.getElementById('code').value = sampleProgram[id];
 	loadProgram();
 }
 

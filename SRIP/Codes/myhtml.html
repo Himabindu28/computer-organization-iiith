@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="mycss.css">
   <script src= "../Libraries/jquery.js"></script>
   <script src="../Libraries/bootstrap.min.js"></script>
-  <script src="programs.js"></script>
+  <script src="samplePrograms.js"></script>
   <script src="myjs.js"></script>
-  
+   <script src="processor.js"></script>
+    <script src="interpreter.js"></script>
+    <script src="system.js"></script>
   
 
 
@@ -52,9 +54,9 @@
       Run </button>
       <ul class="dropdown-menu" role="menu">
 
-    <li> <a onclick="loadProgram()">Assemble</a></li>
-    <li> <a href="#">Run</a></li>
-    <li> <a href="#">Step</a></li>
+    <li> <a id="assem" onclick="assemble();">Assemble</a></li>
+    <li> <a onclick = "resume(200);">Run</a></li>
+    <li> <a onclick="runStep();">Step</a></li>
     <li> <a href="#">Reset</a></li>
     <li> <a href="#">Clear Breakpoints</a></li>
     <li> <a href="#">Toggle Breakpoints</a></li>
@@ -73,275 +75,68 @@
 <hr>
   <ul class="nav nav-pills">
     <li class="active"><a data-toggle="pill" href="#Editor" style="border-left: 1px solid black;">Editor</a></li>
-    <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Execute">Execute</a></li>
+    <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Execute" id="execc">Execute</a></li>
     <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Codes">Codes</a></li>
     <li style="border-left: 1px solid black;"><a data-toggle="pill" href="#Helpin" id="lol">Help</a></li>
   </ul>
   
   <div class="tab-content" >
-    <div id="Editor" class="tab-pane fade in active" style="height: 450px; overflow: auto; border: 1px solid black; padding: 15px 15px 15px 15px;">
-      <textarea id="mips-program" placeholder="# Enter your code here and click on 'Load Program'" style="width:100%;height:400px;resize:none;border:1px solid #00ccff" spellcheck="false"># Enter your code here and click on 'Load Program'
+    <div id="Editor" class="tab-pane fade in active" style="height: 450px; overflow: auto; border: 1px solid black;">
 
-</textarea>
+     <div style="height: 100%; width: 100%">
+      <div id = "lineNumbers"></div>
+      <textarea id = "code"  placeholder="# Enter your code here and click on 'Assemble' under 'Run' button" spellcheck="false"></textarea>
+  </div>
       
     </div>
     <div id="Execute" class="tab-pane fade" style="height: 450px; overflow: auto;border: 1px solid black; padding: 15px 15px 15px 15px;">
-      <h5 align="right" style="margin-right: 12em">Registers</h5>
 
-      <table >
-          <tbody >
-            <tr >
-              <td rowspan="19" >
-                text section
-                <!-- <div style="width: 1000px;border: 1px solid black; "> -->
-                <div id="statustext" style="overflow: auto;"></div>
-                 <!-- </div > -->
+    
+    <div>
+      <table id="registers"><tbody>
 
-              <button id="btn1" style="float:right" onclick="nextStep()" disabled="">Step</button>
-              <br>
-              <br>
-
-              <button id="btn2" style="float:right" onclick="runProgram()" disabled="">Run</button>
-
-                
-                </td>
-                </tr>
-                
-    <tr>
-      <td>Name</td>
-      <td>Number</td>
-      <td >Value</td>
-    </tr>
-
-    <tr>
-      <td>$r0</td>
-      <td>    0   </td>
-      <td id="r0">0</td>
-      <td id="dataSection" rowspan="38" style="background-color:#fff !important;text-align:left;overflow-y:auto"></td>
-    </tr>
-
-    <tr>
-      <td>$at</td>
-      <td>    1   </td>
-      <td id="at">0</td>
-    </tr>
-
-    <tr>
-      <td>$v0</td>
-      <td>    2  </td>
-      <td id="v0">0</td>
-    </tr>
-
-    <tr>
-      <td>$v1</td>
-      <td>    3   </td>
-      <td id="v1">0</td>
-    </tr>
-
-    <tr>
-      <td>$a0</td>
-      <td>    4   </td>
-      <td id="a0">0</td>
-    </tr>
-
-    <tr>
-      <td>$a1</td>
-      <td>    5   </td>
-      <td id="a1">0</td>
-    </tr>
-
-    <tr>
-      <td>$a2</td>
-      <td>    6   </td>
-      <td id="a2">0</td>
-    </tr>
-
-    <tr>
-      <td>$a3</td>
-      <td>    7   </td>
-      <td id="a3">0</td>
-    </tr>
-
-    <tr>
-      <td>$t0</td>
-      <td>    8   </td>
-      <td id="t0">0</td>
-    </tr>
-
-    <tr>
-      <td>$t1</td>
-      <td>    9   </td>
-      <td id="t1">0</td>
-    </tr>
-
-    <tr>
-      <td>$t2</td>
-      <td>    10   </td>
-      <td id="t2">0</td>
-    </tr>
-
-    <tr>
-      <td>$t3</td>
-      <td>    11   </td>
-      <td id="t3">0</td>
-    </tr>
-
-    <tr>
-      <td>$t4</td>
-      <td>    12   </td>
-      <td id="t4">0</td>
-    </tr>
-
-    <tr>
-      <td>$t5</td>
-      <td>    13   </td>
-      <td id="t5">0</td>
-    </tr>
-
-    <tr>
-      <td>$t6</td>
-      <td>    14   </td>
-      <td id="t6">0</td>
-    </tr>
-
-    <tr>
-      <td>$t7</td>
-      <td>    15   </td>
-      <td id="t7">0</td>
-    </tr>
-
-    <tr>
-      <td>$s0</td>
-      <td>    16   </td>
-      <td id="s0">0</td>
-    </tr>
-
-    <tr>
-      <td  rowspan="19"  style="background-color:#fff !important;padding:1em;overflow-y:auto">
-        <div  style="width: 1200px; ">
-        data segment
-        </div>
-      </td>
-
-    </tr>
-
-    <tr>
-      <td>$s1</td>
-      <td>    17   </td>
-      <td id="s1">0</td>
-    </tr>
-
-    <tr>
-      <td>$s2</td>
-      <td>    18   </td>
-      <td id="s2">0</td>
-    </tr>
-
-    <tr>
-      <td>$s3</td>
-      <td>    19   </td>
-      <td id="s3">0</td>
-    </tr>
-
-    <tr>
-      <td>$s4</td>
-      <td>    20   </td>
-      <td id="s4">0</td>
-    </tr>
-
-    <tr>
-      <td>$s5</td>
-      <td>    21   </td>
-      <td id="s5">0</td>
-    </tr>
-
-    <tr>
-      <td>$s6</td>
-      <td>    22   </td>
-      <td id="s6">0</td>
-    </tr>
-
-    <tr>
-      <td>$s7</td>
-      <td>    23   </td>
-      <td id="s7">0</td>
-    </tr>
-
-    <tr>
-      <td>$t8</td>
-      <td>    24   </td>
-      <td id="t8">0</td>
-    </tr>
-
-    <tr>
-      <td>$t9</td>
-      <td>    25   </td>
-      <td id="t9">0</td>
-    </tr>
-
-    <tr>
-      <td>$k0</td>
-      <td>    26   </td>
-      <td id="k0">0</td>
-    </tr>
-
-    <tr>
-      <td>$k1</td>
-      <td>    27   </td>
-      <td id="k1">0</td>
-    </tr>
-      <!-- <tr>
-      <td>$gt</td>
-      <td>    28   </td>
-      <td id="gt">0</td>
-    </tr>
-
-    <tr>
-      <td>$st</td>
-      <td>    29   </td>
-      <td id="st">0</td>
-    </tr>
-
-    <tr>
-      <td>$zt</td>
-      <td>    30   </td>
-      <td id="zt">0</td>
-    </tr>
- -->
-    <tr>
-      <td>$gp</td>
-      <td>    28   </td>
-      <td id="gp">0</td>
-    </tr>
-
-    <tr>
-      <td>$sp</td>
-      <td>    29   </td>
-      <td id="sp">0</td>
-    </tr>
-
-    <tr>
-      <td>$s8</td>
-      <td>    30   </td>
-      <td id="s8">0</td>
-    </tr>
-
-    <tr>
-      <td>$ra</td>
-      <td>    31  </td>
-      <td id="ra">0</td>
-    </tr>
-
-
-
-  </tbody>
-      </table>
-      
+        <tr><td rowspan="32">
+          <ul id="instructions" style="height: 800px;width: 880px;">
+          </ul></td><td rowspan="32"><input type="button" onclick = "resume(200);" value = "Run"/><input type="button" onclick="pause();" value = "Pause"> <input type="button" onclick="runStep();" value = "Step"></td><td>0</td><td>$zero</td><td>0</td></tr>
+        <tr><td>1</td><td>$at</td><td>0</td></tr>
+        <tr><td>2</td><td>$v0</td><td>0</td></tr>
+        <tr><td>3</td><td>$v1</td><td>0</td></tr>
+        <tr><td>4</td><td>$a0</td><td>0</td></tr>
+        <tr><td>5</td><td>$a1</td><td>0</td></tr>
+        <tr><td>6</td><td>$a2</td><td>0</td></tr>
+        <tr><td>7</td><td>$a3</td><td>0</td></tr>
+        <tr><td>8</td><td>$t0</td><td>0</td></tr>
+        <tr><td>9</td><td>$t1</td><td>0</td></tr>
+        <tr><td>10</td><td>$t2</td><td>0</td></tr>
+        <tr><td>11</td><td>$t3</td><td>0</td></tr>
+        <tr><td>12</td><td>$t4</td><td>0</td></tr>
+        <tr><td>13</td><td>$t5</td><td>0</td></tr>
+        <tr><td>14</td><td>$t6</td><td>0</td></tr>
+        <tr><td>15</td><td>$t7</td><td>0</td></tr>
+        <tr><td>16</td><td>$s0</td><td>0</td></tr>
+        <tr><td>17</td><td>$s1</td><td>0</td></tr>
+        <tr><td>18</td><td>$s2</td><td>0</td></tr>
+        <tr><td>19</td><td>$s3</td><td>0</td></tr>
+        <tr><td>20</td><td>$s4</td><td>0</td></tr>
+        <tr><td>21</td><td>$s5</td><td>0</td></tr>
+        <tr><td>22</td><td>$s6</td><td>0</td></tr>
+        <tr><td>23</td><td>$s7</td><td>0</td></tr>
+        <tr><td>24</td><td>$t8</td><td>0</td></tr>
+        <tr><td>25</td><td>$t9</td><td>0</td></tr>
+        <tr><td>26</td><td>$k0</td><td>0</td></tr>
+        <tr><td>27</td><td>$k1</td><td>0</td></tr>
+        <tr><td>28</td><td>$gp</td><td>0</td></tr>
+        <tr><td>29</td><td>$sp</td><td>0</td></tr>
+        <tr><td>30</td><td>$s8</td><td>0</td></tr>
+        <tr><td>31</td><td>$ra</td><td>0</td></tr>
+      </tbody></table>
+  </div><br>
+  
     </div>
     <div id="Codes" class="tab-pane fade" style="height: 440px; border: 1px solid black">
 
       <ul class="nav nav-pills">
-        <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program1">Program 1</a></li>
+        <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs active" data-toggle="pill" href="#Program1">Program 1</a></li>
     <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program2">Program 2</a></li>
     <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#Program3">Program 3</a></li>
     
@@ -353,44 +148,17 @@
           <div style=" overflow: auto;border: 1px solid black; padding-left: 15px;height: 330px; ">
       # Sample Program 1<br>
 <br>
-### Airthmetic and Logical operations ###<br>
+#Program to add two numbers<br>
 <br>
-.text<br>
+  .data<br>
+  sum: .word 0<br>
 <br>
-## Arithmetic ##<br>
-<br>
-  addi $t0 , $zero , 30<br>
-  addi $t1 , $zero , 10<br>
-<br>
-  add $t2 , $t0 , $t1<br>
-<br>
-  sub $t3 , $t1 , $t0<br>
-<br>
-  mul $t4 , $t0 , $t1<br>
-<br>
-## Logical ##<br>
-<br>
-  addi $t0 , $zero , 13 #...0001101<br>
-  addi $t1 , $zero , 11 #...0001011<br>
-<br>
-  and $t2 , $t0 , $t1 #...0001001<br>
-  andi $t3 , $t2 , 12 #...0001001 & ...0001100 = ...0001000<br>
-<br>
-  or $t4 , $t0 , $t1 #...0001111<br>
-  ori $t5 , $t0 , 2 #...0001111<br>
-<br>
-  nor $t6 , $t0 , $t1 # ...1110000<br>
-<br>
-  halt<br>
-<br>
-# Expected register values after halt:<br>
-# $t0 = 13 <br>
-# $t1 = 11
-# $t2 = 9<br>
-# $t3 = 8<br>
-# $t4 = 15<br>
-# $t5 = 15<br>
-# $t6 = -16<br>
+  .text<br>
+  main:<br>
+  li $t0, 10<br>
+  li $t1, 15<br>
+  add $t2, $t0, $t1   # compute the sum.  <br>
+  sw $t2, sum<br>
 </div>
 <div style="height: 30px; ">
   <br><b>
@@ -409,66 +177,29 @@
 
 # Sample Program 2<br>
 <br>
-### Load Word and Store Word ###<br>
+#Program to convert a string to int<br>
 <br>
-.data<br>
-<br>
-  arr1: .word 1 , 2 , 3 , 4<br>
-  arr2: .space 8 # array of 2 words<br>
-  val1: .word 99<br>
-  val2: .space 4  # 1 word<br>
-<br>
+.data <br>
+string: .asciiz "13245"<br>
+newline: .word 10<br>
 .text<br>
+main:<br>
 <br>
-  la $s0 , arr1<br>
-  la $s1 , arr2<br>
+la $t0, string      # Initialize S.<br>
+li $t2, 0         # Initialize sum = 0.<br>
+lw $t5, newline <br>
+sum_loop:<br>
+   lb $t1, ($t0)      # load the byte at addr S into $t1,<br>
+   addu $t0, $t0, 1     # and increment S.<br>
+   beq $t1, $t5, end_sum_loop<br>
 <br>
-  # loading arr1<br>
-  lw $t0 , 0($s0)<br>
-  lw $t1 , 4($s0)<br>
-  lw $t2 , 8($s0)<br>
-  lw $t3 , 12($s0)<br>
+  mul $t2, $t2, 10      # t2 *= 10.<br>
 <br>
-  # storing into arr2<br>
-  sw $t0 , 0($s1)<br>
-  sw $t1 , 4($s1)<br>
+  sub $t1, $t1, 48      # t1 -= '0'.<br>
+  add $t2, $t2, $t1       # t2 += t1.<br>
 <br>
-  addi $sp , $sp , -8<br>
-<br>
-  sw $t2 , 0($sp)<br>
-  sw $t3 , 4($sp)<br>
-<br>
-  # loading arr2 and stack<br>
-  lw $t4 , 0($s1)<br>
-  lw $t5 , 4($s1)<br>
-  lw $t6 , 0($sp)<br>
-  lw $t7 , 4($sp)<br>
-<br>
-  addi $sp , $sp , 8<br>
-  <br>
-  # copying val1 to val2<br>
-  lw $s2 , val1<br>
-  sw $s2 , val2<br>
-  lw $s3 , val2<br>
-<br>
-  halt<br>
-<br>
-# Expected register values after halt:<br>
-# $t0 = 1 <br>
-# $t1 = 2<br>
-# $t2 = 3<br>
-# $t3 = 4<br>
-# $t4 = 1<br>
-# $t5 = 2<br>
-# $t6 = 3<br>
-# $t7 = 4<br>
-# $s2 = 99<br>
-# $s3 = 99<br>
-# $sp = [4,3,,,....] (array value)<br>
-# arr1 = [1,2,3,4]<br>
-# arr2 = [1,2]<br>
-# val1 = 99<br>
-# val2 = 99<br>
+  b sum_loop # and repeat the loop.<br>
+end_sum_loop:<br>
 
       </div>
 <div style="height: 30px; ">
@@ -485,38 +216,25 @@
       <div style=" overflow: auto;border: 1px solid black; padding-left: 15px; height: 310px;">
 
 # Sample Program 3<br>
-<br>
-### Jump Statements ###<br>
+#compute length of a string<br>
 <br>
 .data<br>
-  N: .word 100<br>
+string: .asciiz "This is a string"<br>
+length: .word 0<br>
 <br>
 .text<br>
-  <br>
-  lw $s0 , N<br>
+la $t1, string<br>
+li $t2, 0<br>
+length_loop:<br>
+  lb $t3, ($t1)<br>
+  beqz $t3, endloop<br>
+  addu $t2, $t2, 1<br>
+  addu $t1, $t1, 1<br>
+  b length_loop<br>
+endloop:<br>
+  sub $t2, $t2, 1   #subtract 1 to ignore <br>
+  sw $t2, length<br>
 <br>
-  slti $t0 , $s0 , 0<br>
-  bne $t0 , $zero , end<br>
-<br>
-  sumN:<br>
-    addi $t1 , $t1 , 0 #$t1 = i<br>
-    add $s1 , $s1 , $s0 #$s1 = sum<br>
-    loop:<br>
-      slt $t2 , $t1 , $s0 #i<br>
-      beq $t2 , $zero , end<br>
-      add $s1 , $s1 , $t1 #sum = sum + i<br>
-      addi $t1 , $t1 , 1 #i = i + 1<br>
-      j loop<br>
-<br>
-  end:<br>
-    halt<br>
-<br>
-<br>
-# Expected register values after halt:<br>
-# $t1 = 100<br>
-# $s0 = 100<br>
-# $s1 = 5050<br>
-
       </div>
 <div style="height: 30px; ">
   <br>
@@ -782,35 +500,26 @@
       
     </div>
 
-      <div class="bottom_menu">
-    
-
-<div class="tab-content" >
-    <div id="bottom_Run" class="tab-pane fade in active" >
-      <h3> Run Input/Output </h3>
-      
+   <ul class="nav nav-pills">
+        <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#runip">Run I/P & O/P</a></li>
+    <li style="border-left: 1px solid black;"><a class="btn btn-info btn-xs" data-toggle="pill" href="#parsee">Parse Message</a></li>    
+    </ul>
+    <div class="tab-content" style=" width: 100%" >
+         <div id="runip" class="tab-pane fade" style=" overflow: auto; ">
+          <div id="io">
+            </div>
+        </div>
+        <div id="parsee" class="tab-pane fade in active" style=" overflow: auto;">
+          <div style=" overflow: auto;border: 1px solid black;">
+          <div id="status" style=" height: 100px;">
+            </div>
+          </div>
+        </div>
     </div>
-    <div id="bottom_parser" class="tab-pane fade">
-      <h3>Parser Message</h3>
-      
-    </div>
 
-    <div class="wrapper">
-      <div style="background-color: grey;width: 10px">
-        
-      
-     
-        <div id="status" style="float:left;background-color:#fff ;width:100%"></div>
-        <!-- <textarea id="parsertext" style="width: 100%;height:95%;">
-
-      </textarea> -->
-      <!-- <button  id="bottom_clear">Clear</button> -->
-      </div>
-    </div>
-    <br>
-  </div>
-  </div>
+</div>
 </div>
 </div>
 </body>
+ <script src="main.js"></script>
 </html>

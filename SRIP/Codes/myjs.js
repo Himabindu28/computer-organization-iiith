@@ -72,15 +72,6 @@ var textareas = document.getElementsByTagName('textarea');
 
 
 
-function enableButtons(argument) { // enable 'Next Step' and 'Run Till End' buttons
-	document.getElementById("btn1").disabled = false;
-	document.getElementById("btn2").disabled = false;
-}
-
-function disableButtons(argument) { // disable 'Next Step' and 'Run Till End' buttons
-	document.getElementById("btn1").disabled = true;
-	document.getElementById("btn2").disabled = true;
-}
 
 function updateData(start,end) {
 	data = {}; 
@@ -159,7 +150,7 @@ function updateData(start,end) {
 	
 function loadProgram() {
 
-	disableButtons();
+
 
 	data = {}; // clearing the data section
 	allLabels = {};
@@ -205,10 +196,7 @@ function loadProgram() {
     	for(var i=pos+1 ; i<instructions.length ; i++) { // to find the end of .data section
     		if(instructions[i].indexOf(':')==-1) {
     			if(updateData(pos,i)) break;
-    			else {
-    				alert('Error reading the data');
-    				return;
-    			}
+    			
     		}
     	}
     }
@@ -217,12 +205,7 @@ function loadProgram() {
     var x;
     for(var i=0 ; i<instructions.length ; i++) { // to validate the syntax
     	// middlewares: 'validateIns','getInstruction','checkForSyntaxError'
-    	if((!validateIns(getInstruction(instructions[i])) && !validateIns(instructions[i])) || checkForSyntaxError(instructions[i])){ // if invalid
-    		alert("Error in syntax: "+instructions[i]);
-			document.getElementById('status').innerHTML = ' ERROR:'+instructions[i];
-    		currentInstruction = instructions.length;
-    		return;
-    	}
+    	
     	if(isLabel(instructions[i])){ // checking for repetition of label
 
     		if(!validLabel(instructions[i])){
@@ -248,7 +231,7 @@ function loadProgram() {
     // updateRegistersInUI(); // middleware
 
 	document.getElementById('status').innerHTML = '(program loaded)';
-	enableButtons();
+	
 
 }
 
@@ -266,12 +249,12 @@ function nextStep() {
 		var node = document.createElement("P");
 	  var textnode = document.createTextNode(instructions[currentInstruction]);
 	  node.appendChild(textnode);
-	  document.getElementById("statustext").appendChild(node);
+	  document.getElementById("statusT").appendChild(node);
 		var instruction = instructions[currentInstruction];
 		if(instruction.indexOf('halt') != -1) { // ending if its a 'halt'
 			alert('Program Ended!');
 			currentInstruction++;
-			disableButtons();
+		
 			return false;
 		} else if(instruction.indexOf('j ') != -1 || instruction.indexOf('$') != -1){ // checking if its not a lable
 			if(instructionFunctions[getInstruction(instruction)](instruction)){
@@ -282,7 +265,7 @@ function nextStep() {
 				// execution was unsuccessful
 				alert('Run time error: '+instruction);
 				currentInstruction = instructions.length;
-				disableButtons();
+				
 				return false;
 			}
 		} else { // executing next instruction if encountered a label
@@ -297,7 +280,7 @@ function nextStep() {
 }
 
 function runProgram(){
-	disableButtons();
+	
 	while(nextStep());
 }
 
@@ -734,6 +717,33 @@ function labelPosition(label){
 	return -1;
 }
 
+
+function updateRegistersInUI() {
+	document.getElementById('dataSection').innerHTML = "";
+
+	for(var i=0 ; i<allRegisterNames.length ; i++) { // to update the registers
+		if(registers[allRegisters[i]].constructor == Object )
+			registerDOM[i].innerHTML = registers[allRegisters[i]].base - (registers[allRegisters[i]].current * 4);
+		else
+			registerDOM[i].innerHTML = registers[allRegisters[i]];
+	}
+
+	var word = '' , space = '';
+
+	for(i in data) { // to update the .data section
+		if(data[i].type == 'word'){
+			word += '&emsp;<li>'+ i + ': ' + (data[i].array? '['+data[i].array+']': data[i].number) + '<br></li>';
+		} else if(data[i].type == 'space') {
+			space += '&emsp;<li>'+ i + ': ' + (data[i].array? '['+data[i].array.slice().reverse()+']': data[i].number) + '<br></li>';
+		}
+	}
+
+	// updated values in the stack
+	var stack = '<b>$sp</b> (max size = 100 words) : <br>&emsp;' + (registers['$sp'].array? '['+registers['$sp'].array+']': registers['$sp'].number) + '<br>';
+	
+	document.getElementById('dataSection').innerHTML = stack + '<br>' + (word==''?'':('<b>.word</b>:<ul>' + word+'</ul>')) + (space==''? '' :('<b>.space</b><ul>' + space + '</ul>'));
+
+}
 
 
 

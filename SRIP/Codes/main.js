@@ -14,8 +14,6 @@ function assemble() {
 	addLineNumbers();
 	updateRegisters();
 	instructionsList = document.getElementById("instructions");
-	if (instructionsList.children.length>0)
-		instructionsList.children[processor.programCounter].style["backgroundColor"]="hsl(120,27%,90%)";
 	//jump to main, if it exists
 	if(processor.instrLabels["main"]!=undefined)
 		processor.programCounter = processor.instrLabels["main"];
@@ -56,16 +54,12 @@ function runStep() {
 	if(!processor.running) return;
 	
 	instructionsList = document.getElementById("instructions");
-	if (instructionsList.children.length>0)
-		instructionsList.children[processor.programCounter].style["backgroundColor"]="white";
 	processor.runInstr();
 	updateRegisters();
 
 	if(!processor.running) return;
 
-	if (instructionsList.children.length>0)
-		instructionsList.children[processor.programCounter].style["backgroundColor"]="blue";
-
+	
 };
 
 function resume(interval) {

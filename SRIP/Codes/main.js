@@ -51,8 +51,8 @@ function addLineNumbers() {
 };
 
 function runStep() {
+
 	if(!processor.running) return;
-	
 	instructionsList = document.getElementById("instructions");
 	processor.runInstr();
 	updateRegisters();
